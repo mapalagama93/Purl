@@ -1,5 +1,9 @@
 
 class PFile:
+    
+    filePath = None
+    fileContent = None;
+
     method = None
     url = None
     status = 200

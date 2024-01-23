@@ -1,0 +1,5 @@
+GET 
+https://reqres.in/api/users2
+
+[PreScript]
+print('hello prescript')

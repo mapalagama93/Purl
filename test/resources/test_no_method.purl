@@ -1,0 +1,32 @@
+# name : test 1
+# description : get user list
+
+https://reqres.in/api/users22
+
+
+[BasicAuth]
+
+[QueryStringParams]
+
+[Headers]
+
+[JsonBody]
+
+[XmlBody]
+
+[PlainTextBody]
+
+[FormParams]
+
+[MultipartFormData]
+
+[Capture]
+
+[Options]
+
+[Asserts]
+
+[PreScript]
+
+[PostScript]
+

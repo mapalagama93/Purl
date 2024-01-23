@@ -2,6 +2,7 @@ from jproperties import Properties
 from pathlib import Path
 import os
 from termcolor import cprint
+from app.args import args
 
 class Vars:
     __configs = Properties()
@@ -11,7 +12,7 @@ class Vars:
     __env_files = []
     __is_store_file_exists = True
 
-    def init(self, args):
+    def init(self):
         self.__config_file = args.root + '/configs/config.properties'
         self.__store_file = args.root + '/configs/store.properties'
         self.__env_files = [args.root + '/configs/' + file + '.properties' for file in args.env]

@@ -1,9 +1,7 @@
 # name : test 1
 # description : get user list
+GET
 
-POST
-https://reqres.in/api/users
-HTTP 200
 
 [BasicAuth]
 

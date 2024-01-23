@@ -1,0 +1,10 @@
+# name : test 1
+# description : get user list
+GET 
+https://reqres.in/api/users22
+
+
+[Headers]
+header1: val1
+header2: val2
+header3: val3

@@ -1,0 +1,59 @@
+# name : test 1
+# description : get user list
+GET 
+{{scema}}://reqres.in/api/users22
+
+
+[BasicAuth]
+username: abc
+password: password1
+
+[QueryStringParams]
+query1: q1
+query2: q2
+
+[Headers]
+content: content header
+authorization: auth header
+
+[JsonBody]
+{
+    "jkey1" : 1123,
+    "jkey2" : "key2"
+}
+
+[XmlBody]
+<xml>
+    <key>key here</key>
+</xml>
+
+[PlainTextBody]
+plain html text body
+
+[FormParams]
+formParam1: form param1
+formParam2: 1000
+
+[MultipartFormData]
+multiformParam1: multiform param1
+multiformParam2: multi 1000
+
+[Capture]
+textVal: "@body jsonpath $text"
+testHeader: "@headers $text"
+
+[Options]
+insecure: true
+retry: 10
+
+[Asserts]
+textVal: "@body jsonpath $text == 200"
+testHeader: "@headers $text == 200"
+
+[PreScript]
+import var
+print('hello prescript')
+
+[PostScript]
+import var
+print('hello post script')
