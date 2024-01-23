@@ -1,0 +1,33 @@
+# name : test 1
+# description : get user list
+
+POST
+https://reqres.in/api/users
+HTTP 200
+
+[BasicAuth]
+
+[QueryStringParams]
+
+[Headers]
+
+[JsonBody]
+
+[XmlBody]
+
+[PlainTextBody]
+
+[FormParams]
+
+[MultipartFormData]
+
+[Capture]
+
+[Options]
+
+[Asserts]
+
+[PreScript]
+
+[PostScript]
+

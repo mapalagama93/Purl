@@ -1,3 +1,6 @@
-app/__pycache__
+**.pyc
 build
 requirement.txt
+*.egg-info
+dist
+.vscode

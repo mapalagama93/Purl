@@ -1,3 +1,4 @@
 
 def main():
-    print("working")
+    from . import app
+    app.main()
