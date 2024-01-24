@@ -1,5 +1,5 @@
 from app.args import args
-
+from app.vars import vars
 def main():
     # if -i flag enabled run initializer
     args.parse()
@@ -10,5 +10,6 @@ def main():
         exit()
     
     from app.core.processor import processor
+    vars.init()
     processor.process(args.files)
     

@@ -1,0 +1,7 @@
+POST 
+{{server}}/api/query/json
+
+[QueryParams]
+
+test1: testing parameter1
+test2: testing parameter2

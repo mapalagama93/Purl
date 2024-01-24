@@ -1,0 +1,5 @@
+POST 
+{{server}}/api/path/:test1/json
+
+[PathParams]
+test1: testing

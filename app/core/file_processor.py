@@ -15,18 +15,19 @@ class FileProcessor:
     def read_file(self):
         self.pfile = PFile()
         self.pfile.file_path = utils.get_abs_file_path(self.file)
-        log.info('reading file %s', self.pfile.file_path)
-        self.pfile.file_content = open(self.pfile.file_path, 'r').read()
+        log.info('reading file = %s', self.pfile.file_path)
+        with open(self.pfile.file_path, 'r') as content:
+            self.pfile.file_content = content.read()
         return self.pfile
     
     def parse_pre_script(self):
-        self.pfile.pre_script = self.get_content_for(self.pfile.file_content, "PreScript")
+        self.pfile.pre_script = self.get_content_for("PreScript")
         return self.pfile
     
     def __parse_file_content(self):
         vals = vars.get_all()
         for v in vals:
-            self.pfile.file_content =  self.pfile.file_content.replace('{{' + v + '}}', str(vals[v]))
+            self.pfile.file_content =  self.pfile.file_content.replace('{{' + v + '}}', str(vals[v].data))
         # catch missing parametrs
         regex = r"{{(\w+)}}"
         matches = re.finditer(regex,  self.pfile.file_content, re.MULTILINE)
@@ -38,7 +39,6 @@ class FileProcessor:
 
     def parse_file(self):
         self.__parse_file_content()
-        print(self.pfile.file_content)
         self.__set_method_url()
         basic_auth = self.get_content_for("BasicAuth")
         if basic_auth:
@@ -47,6 +47,10 @@ class FileProcessor:
         headers = self.get_content_for("Headers")
         if headers:
             self.pfile.headers = utils.str_to_yaml(headers)
+
+        path_params = self.get_content_for("PathParams")
+        if path_params:
+            self.pfile.path_params = utils.str_to_yaml(path_params)
 
         query_params = self.get_content_for("QueryParams")
         if query_params:

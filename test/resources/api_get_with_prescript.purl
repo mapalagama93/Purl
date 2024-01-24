@@ -1,5 +1,5 @@
 GET 
-https://reqres.in/api/users2
+{{server}}/api/json
 
 [PreScript]
 print('hello prescript')
