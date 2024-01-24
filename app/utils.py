@@ -12,5 +12,8 @@ def is_file_exists(path):
 def str_to_json(text):
     return json.loads(text)
 
+def obj_to_json_string(obj):
+    return json.dumps(obj)
+
 def str_to_yaml(text):
     return yaml.safe_load(text)

@@ -8,4 +8,4 @@ https://reqres.in/api/users22
 header1: val1
 header2: val2
 header3: val3
-[QueryStringParams]
+[QueryParams]

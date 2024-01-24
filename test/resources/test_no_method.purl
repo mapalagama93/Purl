@@ -6,7 +6,7 @@ https://reqres.in/api/users22
 
 [BasicAuth]
 
-[QueryStringParams]
+[QueryParams]
 
 [Headers]
 
@@ -14,11 +14,11 @@ https://reqres.in/api/users22
 
 [XmlBody]
 
-[PlainTextBody]
+[TextBody]
 
 [FormParams]
 
-[MultipartFormData]
+[MultipartData]
 
 [Capture]
 

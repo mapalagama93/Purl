@@ -5,10 +5,10 @@ GET
 
 
 [BasicAuth]
-username: abc
+username: {{p1}}
 password: password1
 
-[QueryStringParams]
+[QueryParams]
 query1: q1
 query2: q2
 
@@ -18,7 +18,7 @@ authorization: auth header
 
 [JsonBody]
 {
-    "jkey1" : 1123,
+    "jkey1" : {{p2}},
     "jkey2" : "key2"
 }
 
@@ -27,14 +27,14 @@ authorization: auth header
     <key>key here</key>
 </xml>
 
-[PlainTextBody]
+[TextBody]
 plain html text body
 
 [FormParams]
 formParam1: form param1
 formParam2: 1000
 
-[MultipartFormData]
+[MultipartData]
 multiformParam1: multiform param1
 multiformParam2: multi 1000
 

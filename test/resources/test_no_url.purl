@@ -5,7 +5,7 @@ GET
 
 [BasicAuth]
 
-[QueryStringParams]
+[QueryParams]
 
 [Headers]
 
@@ -13,11 +13,11 @@ GET
 
 [XmlBody]
 
-[PlainTextBody]
+[TextBody]
 
 [FormParams]
 
-[MultipartFormData]
+[MultipartData]
 
 [Capture]
 

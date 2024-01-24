@@ -1,22 +1,22 @@
 
 class PFile:
     
-    filePath = None
-    fileContent = None;
+    file_path = None
+    file_content = None;
 
     method = None
     url = None
     status = 200
-    basicAuth = None
-    queryStringParams = {}
+    basic_auth = None
+    path_param = {}
+    query_params = {}
     headers = {}
-    jsonBody = None
-    xmlBody = None
-    plainTextBody = None 
-    formParams = None
-    multipartFormData = None
+    json_body = None
+    text_body = None 
+    form_params = None
+    multipart_data = None
     capture = None
     options = {}
     asserts = {}
-    preScript = None 
-    postScript = None
+    pre_script = None 
+    post_script = None

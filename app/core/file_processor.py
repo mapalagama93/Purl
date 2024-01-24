@@ -3,80 +3,101 @@ from app.pfile import PFile
 import app.utils as utils
 import re
 import logging as log
+from app.vars import vars
 
 class FileProcessor:
 
-    def get_pfile(self, file):
-        pfile = PFile()
-        pfile.filePath = utils.get_abs_file_path(file)
-        pfile.fileContent = self.read_file(pfile.filePath)
-        self.parse_pfile(pfile)
-        return pfile
+
+    def __init__(self, file):
+        self.file = file
+        self.read_file()
+
+    def read_file(self):
+        self.pfile = PFile()
+        self.pfile.file_path = utils.get_abs_file_path(self.file)
+        log.info('reading file %s', self.pfile.file_path)
+        self.pfile.file_content = open(self.pfile.file_path, 'r').read()
+        return self.pfile
     
-    def parse_pfile(self, pfile):
-        self.__set_method_url(pfile)
+    def parse_pre_script(self):
+        self.pfile.pre_script = self.get_content_for(self.pfile.file_content, "PreScript")
+        return self.pfile
+    
+    def __parse_file_content(self):
+        vals = vars.get_all()
+        for v in vals:
+            self.pfile.file_content =  self.pfile.file_content.replace('{{' + v + '}}', str(vals[v]))
+        # catch missing parametrs
+        regex = r"{{(\w+)}}"
+        matches = re.finditer(regex,  self.pfile.file_content, re.MULTILINE)
+        errors = []
+        for m in matches:
+            errors.append("{{"+m.group(1)+"}}")
+        if len(errors) > 0:
+            raise Exception('Unknown values for variables ' + utils.obj_to_json_string(errors))
 
-        basicAuth = self.get_content_for(pfile.fileContent, "BasicAuth")
-        if basicAuth:
-            pfile.basicAuth = utils.str_to_yaml(basicAuth)
+    def parse_file(self):
+        self.__parse_file_content()
+        print(self.pfile.file_content)
+        self.__set_method_url()
+        basic_auth = self.get_content_for("BasicAuth")
+        if basic_auth:
+            self.pfile.basic_auth = utils.str_to_yaml(basic_auth)
 
-        headers = self.get_content_for(pfile.fileContent, "Headers")
+        headers = self.get_content_for("Headers")
         if headers:
-            pfile.headers = utils.str_to_yaml(headers)
+            self.pfile.headers = utils.str_to_yaml(headers)
 
-        queryStringParams = self.get_content_for(pfile.fileContent, "QueryStringParams")
-        if queryStringParams:
-            pfile.queryStringParams = utils.str_to_yaml(queryStringParams)
+        query_params = self.get_content_for("QueryParams")
+        if query_params:
+            self.pfile.query_params = utils.str_to_yaml(query_params)
 
-        jsonBody = self.get_content_for(pfile.fileContent, "JsonBody")
-        if jsonBody != None:
-            pfile.jsonBody = utils.str_to_json(jsonBody)
+        json_body = self.get_content_for("JsonBody")
+        if json_body != None:
+            self.pfile.json_body = utils.str_to_json(json_body)
 
-        formParams = self.get_content_for(pfile.fileContent, "FormParams")
-        if formParams:
-            pfile.formParams = utils.str_to_yaml(formParams)
+        form_params = self.get_content_for("FormParams")
+        if form_params:
+            self.pfile.form_params = utils.str_to_yaml(form_params)
      
-        multipartFormData = self.get_content_for(pfile.fileContent, "MultipartFormData")
-        if multipartFormData:
-            pfile.multipartFormData = utils.str_to_yaml(multipartFormData)
+        multipart_data = self.get_content_for("MultipartData")
+        if multipart_data:
+            self.pfile.multipart_data = utils.str_to_yaml(multipart_data)
 
-        capture = self.get_content_for(pfile.fileContent, "Capture")
+        capture = self.get_content_for("Capture")
         if capture:
-            pfile.capture = utils.str_to_yaml(capture)
+            self.pfile.capture = utils.str_to_yaml(capture)
 
-        options = self.get_content_for(pfile.fileContent, "Options")
+        options = self.get_content_for("Options")
         if options:
-            pfile.options = utils.str_to_yaml(options)
+            self.pfile.options = utils.str_to_yaml(options)
 
-        asserts = self.get_content_for(pfile.fileContent, "Asserts")
+        asserts = self.get_content_for("Asserts")
         if asserts:
-            pfile.asserts = utils.str_to_yaml(asserts)
+            self.pfile.asserts = utils.str_to_yaml(asserts)
             
 
-        pfile.xmlBody = self.get_content_for(pfile.fileContent, "XmlBody")
-        pfile.plainTextBody = self.get_content_for(pfile.fileContent, "PlainTextBody")
-        pfile.preScript = self.get_content_for(pfile.fileContent, "PreScript")
-        pfile.postScript = self.get_content_for(pfile.fileContent, "PostScript")
+        self.pfile.text_body = self.get_content_for("TextBody")
+        self.pfile.pre_script = self.get_content_for("PreScript")
+        self.pfile.post_script = self.get_content_for("PostScript")
+        return self.pfile
     
-    def __set_method_url(self, pfile):
+    def __set_method_url(self):
         try:
             regex = r"((GET|POST|PATCH|DELETE|PUT))\s+((htt|{{).*)\s+"
-            matches = re.search(regex, pfile.fileContent, re.MULTILINE)
-            pfile.url = matches.group(3)
-            pfile.method = matches.group(2)
-            if(pfile.url == None or pfile.method == None):
+            matches = re.search(regex, self.pfile.file_content, re.MULTILINE)
+            self.pfile.url = matches.group(3)
+            self.pfile.method = matches.group(2)
+            if(self.pfile.url == None or self.pfile.method == None):
                 raise Exception()
-            log.debug('captured url %s', pfile.url)
-            log.debug('captured method %s', pfile.method)
+            log.debug('captured url %s', self.pfile.url)
+            log.debug('captured method %s', self.pfile.method)
         except Exception as error:
             raise Exception('Cannot find method and url')
 
-    def read_file(self, filePath):
-        log.info('reading file %s', filePath)
-        return open(filePath, 'r').read()
-    
 
-    def get_content_for(self, text, tag, defaultValue=None):
+    def get_content_for(self, tag, defaultValue=None):
+        text = self.pfile.file_content
         regex = r"\[" + tag +"\]\s((.|\n|\r\n)*?)\["
         matches = re.search(regex, text, re.MULTILINE)
         if matches:
@@ -91,5 +112,3 @@ class FileProcessor:
             log.debug('tag content found end for \n[%s]\n%s\n', tag, content)
             return content
         return defaultValue
-    
-file_processor = FileProcessor()
