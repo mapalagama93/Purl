@@ -1,5 +1,5 @@
 GET 
-{{server}}/api/json
+{{server}}/api/text
 
 [PreScript]
 print('hello prescript')

@@ -2,6 +2,7 @@ from requests import request
 import app.utils as utils
 import logging as log
 from termcolor import cprint, colored
+import json
 
 class RequestProcessor:
 
@@ -19,6 +20,7 @@ class RequestProcessor:
         self.__log_request()
         self.response = request(method, url, data=data, json=json, params=query_params, headers=headers)
         self.file.response = self.response
+        self.__log_response()
         log.info('response received. status = %s', self.response.status_code)
 
     def __get_url(self):
@@ -32,6 +34,7 @@ class RequestProcessor:
         if self.file.query_params:
             log.info('prepare query params')
             return self.file.query_params
+        return None
         
     def __get_headers(self):
         if self.file.headers:
@@ -54,19 +57,63 @@ class RequestProcessor:
             return self.file.form_params
 
     def __log_request(self):
-        cprint(' REQUEST ', 'black', 'on_blue')
+        cprint(' REQUEST ', 'black', 'on_blue', attrs=["bold"])
+        print('')
         print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.__get_url(), attrs=['bold']))
+        print('')
+        # print headers
         print(colored('Request Headers ', 'magenta', attrs=['bold']))
-        for k, v in self.__get_headers().items():
-            print(colored(k, attrs=['bold']), ':', colored(v))
-        # print(colored('Request Body ', 'magenta', attrs=['bold']), 
-        #       colored('[JSON]' if self.__is_json_request() and self.__data() != None else '', 'light_grey', attrs=['bold']), '\n', 
-        #       data, sep="")
-        print('\n')
+        headers = self.__get_headers()
+        if len(headers) == 0:
+            print(colored('None', 'light_grey', attrs=['bold']))
+        for k, v in headers.items():
+            print(colored(k, 'dark_grey'), ':', colored(v))
+        print('')
+        # print body
+        type = ''
+        data = 'None'
+        if self.__get_json():
+            type = '[JSON]'
+            data = json.dumps(self.__get_json())
+        elif self.file.form_params:
+            type = '[FORM]'
+            data = ''
+            for k, v in self.file.form_params.items():
+                data += colored(k, attrs=['bold'])
+                data += ' : '
+                data += colored(v)
+                data += '\n'
+
+        elif self.file.text_body:
+            type = '[TEXT]'
+            data = self.file.text_body
+        elif self.file.multipart_data:
+            type = '[MULTIPART]'
+            data = 'Multipart not supported yet'
+        
+        print(colored('Request Body ' + type, 'magenta', attrs=['bold']))
+        print(colored(data, 'light_grey', attrs=['bold']))
+        print('')
     
     def __log_response(self):
-        cprint(' RESPONSE ', 'black', 'on_green')
-        print(colored('Status', 'magenta', attrs=['bold']), self.response['status'])
-        print(colored('Response Body ', 'magenta', attrs=['bold']), '\n', 
-              json.dumps(self.response['data'], indent=2) if self.__is_json_response() and self.response['json'] else self.response['data'], sep="")
-        print(colored('Response Headers ', 'magenta', attrs=['bold']), '\n' , json.dumps(self.response['headers'], indent=2))
+        print(colored(' RESPONSE ', 'black', 'on_green', attrs=["bold"]) + 
+              colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' ', 
+                      'black', 'on_dark_grey', attrs=['bold']))
+        print('')
+        # print response body
+        body = self.response.text
+        try:
+            if self.response.json():
+                body = json.dumps(self.response.json(), indent=2)
+        except:
+            pass
+        print(colored('Response Body ', 'magenta', attrs=['bold']))
+        print(colored(body, 'light_grey'))
+        print('')
+        # print response header
+        print(colored('Response Headers ', 'magenta', attrs=['bold']))
+        headers = self.response.headers
+        if len(headers) == 0:
+            print(colored('None', 'light_grey', attrs=['bold']))
+        for k, v in headers.items():
+            print(colored(k, 'dark_grey'), ':', colored(v))
