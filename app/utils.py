@@ -12,7 +12,9 @@ def is_file_exists(path):
 def str_to_json(text):
     return json.loads(text)
 
-def obj_to_json_string(obj):
+def obj_to_json_string(obj, pretty=False):
+    if pretty:
+        return json.dumps(obj, indent=2)
     return json.dumps(obj)
 
 def str_to_yaml(text):

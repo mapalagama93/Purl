@@ -1,13 +1,14 @@
 from app.args import args
 from app.core.file_processor import FileProcessor
+from app.core.curl_generator import CurlGenerator
 from app.core.request_processor import RequestProcessor
 from app.core.script_executor import script_executor
 import logging as log
+from termcolor import cprint
 
 class Processor:
-    
-    def process(self, files):
 
+    def process(self, files):
         for file in files:
             log.info('processing file, file = %s', __file__)
             file_processor = FileProcessor(file)
@@ -21,7 +22,18 @@ class Processor:
                 script_executor.execute(pfile.pre_script)
 
             pfile = file_processor.parse_file()
-            request_processor = RequestProcessor(pfile)
-            request_processor.process()
+
+            if args.is_curl:
+               curl_generator = CurlGenerator(pfile)
+               curl_generator.generate_curl()
+            else:
+                request_processor = RequestProcessor(pfile)
+                try:
+                    request_processor.process()
+                except Exception as e:
+                    cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
+                    cprint(str(e), 'light_yellow')
+                    exit()
+
             
 processor = Processor()

@@ -24,3 +24,20 @@ class PFile:
 
     # response vars
     response = None
+
+    def get_full_url(self):
+        url = self.url
+        if self.path_params:
+            for x in self.path_params:
+                url = url.replace(':' + x, str(self.path_params[x]))
+        return url
+
+    def get_content_type(self):
+        if self.json_body:
+            return 'application/json'
+        elif self.form_params:
+            return 'application/x-www-form-urlencoded'
+        elif self.multipart_data:
+            return 'tform-data/multipart'
+        return 'text/plain'
+        

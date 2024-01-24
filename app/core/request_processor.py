@@ -11,7 +11,7 @@ class RequestProcessor:
 
     def process(self):
         method = self.file.method
-        url = self.__get_url()
+        url = self.file.get_full_url()
         headers = self.__get_headers()
         json = self.__get_json()
         data = self.__get_data()
@@ -23,13 +23,6 @@ class RequestProcessor:
         self.__log_response()
         log.info('response received. status = %s', self.response.status_code)
 
-    def __get_url(self):
-        url = self.file.url
-        if self.file.path_params:
-            for x in self.file.path_params:
-                url = url.replace(':' + x, str(self.file.path_params[x]))
-        log.info('prepare url, url = %s', url)
-        return url
     def __get_query_params(self):
         if self.file.query_params:
             log.info('prepare query params')
@@ -59,7 +52,7 @@ class RequestProcessor:
     def __log_request(self):
         cprint(' REQUEST ', 'black', 'on_blue', attrs=["bold"])
         print('')
-        print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.__get_url(), attrs=['bold']))
+        print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.file.get_full_url(), attrs=['bold']))
         print('')
         # print headers
         print(colored('Request Headers ', 'magenta', attrs=['bold']))
@@ -105,7 +98,7 @@ class RequestProcessor:
         body = self.response.text
         try:
             if self.response.json():
-                body = json.dumps(self.response.json(), indent=2)
+                body = utils.obj_to_json_string(self.response.json(), pretty=True)
         except:
             pass
         print(colored('Response Body ', 'magenta', attrs=['bold']))

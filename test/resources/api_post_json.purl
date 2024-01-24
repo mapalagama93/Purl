@@ -1,0 +1,15 @@
+POST 
+{{server}}/api/form/json
+
+[JsonBody]
+{
+    "he" : "11",
+    "he2" : "11",
+    "he3" : "11",
+    "he4" : "11",
+    "he5" : "11"
+}
+
+[Headers]
+accept: application/json
+authroization: Basic qio4rywefasdkjfcolesdifg==
