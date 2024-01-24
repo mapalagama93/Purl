@@ -83,6 +83,7 @@ class RequestProcessor:
                 data += ' : '
                 data += colored(v)
                 data += '\n'
+            data = data[:-1]
 
         elif self.file.text_body:
             type = '[TEXT]'
