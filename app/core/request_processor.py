@@ -20,8 +20,16 @@ class RequestProcessor:
         self.__log_request()
         self.response = request(method, url, data=data, json=json, params=query_params, headers=headers)
         self.file.response = self.response
+        self.__set_response()
         self.__log_response()
         log.info('response received. status = %s', self.response.status_code)
+
+    def __set_response(self):
+        try:
+            self.file.response_json = self.response.json()
+        except:
+            self.file.response_text = self.response.text
+        self.file.response_status = self.response.status_code
 
     def __get_query_params(self):
         if self.file.query_params:
@@ -50,7 +58,7 @@ class RequestProcessor:
             return self.file.form_params
 
     def __log_request(self):
-        cprint(' REQUEST ', 'black', 'on_blue', attrs=["bold"])
+        cprint(' REQUEST ', 'white', 'on_blue', attrs=["bold"])
         print('')
         print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.file.get_full_url(), attrs=['bold']))
         print('')
@@ -90,17 +98,15 @@ class RequestProcessor:
         print('')
     
     def __log_response(self):
-        print(colored(' RESPONSE ', 'black', 'on_green', attrs=["bold"]) + 
+        print(colored(' RESPONSE ', 'white', 'on_green', attrs=["bold"]) + 
               colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' ', 
-                      'black', 'on_dark_grey', attrs=['bold']))
+                      'white', 'on_dark_grey', attrs=['bold']))
         print('')
         # print response body
-        body = self.response.text
-        try:
-            if self.response.json():
-                body = utils.obj_to_json_string(self.response.json(), pretty=True)
-        except:
-            pass
+        body = self.file.response_text
+        if self.file.response_json:
+            body = utils.obj_to_json_string(self.response.json(), pretty=True)
+            
         print(colored('Response Body ', 'magenta', attrs=['bold']))
         print(colored(body, 'light_grey'))
         print('')

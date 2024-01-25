@@ -24,6 +24,9 @@ class PFile:
 
     # response vars
     response = None
+    response_json = None
+    response_text = None 
+    response_status = None
 
     def get_full_url(self):
         url = self.url

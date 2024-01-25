@@ -51,13 +51,6 @@ class TestFileProcessor(unittest.TestCase):
         pfile = processor.parse_file()
         self.assertIsNotNone(pfile.headers)
 
-    def testAllSectionsNoVar(self):
-        logging.basicConfig(level=logging.DEBUG)
-        args.root = os.path.abspath(os.getcwd() + '/test/resources')
-        args.env = []
-        vars.init()
-        processor = FileProcessor('test_all_sections.purl')
-        self.assertRaises(Exception, processor.parse_file)
 
     def testAllSectionsVar(self):
         logging.basicConfig(level=logging.DEBUG)

@@ -10,3 +10,5 @@ test2: testing parameter2
 content-type: application/json
 accept: application/json
 authroization: Basic qio4rywefasdkjfcolesdifg==
+
+[Capture]
