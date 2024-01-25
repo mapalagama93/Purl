@@ -58,7 +58,6 @@ class RequestProcessor:
             return self.file.form_params
 
     def __log_request(self):
-        cprint(' REQUEST ', 'white', 'on_blue', attrs=["bold"])
         print('')
         print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.file.get_full_url(), attrs=['bold']))
         print('')
@@ -73,9 +72,9 @@ class RequestProcessor:
         # print body
         type = ''
         data = 'None'
-        if self.__get_json():
+        if self.file.json_body:
             type = '[JSON]'
-            data = json.dumps(self.__get_json())
+            data = utils.obj_to_json_string(self.file.json_body, pretty=True)
         elif self.file.form_params:
             type = '[FORM]'
             data = ''

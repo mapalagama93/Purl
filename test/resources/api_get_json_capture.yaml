@@ -1,0 +1,12 @@
+Method: POST
+Endpoint: ${server}/api/json
+
+JsonBody: |
+  {
+    "test" : "test json value"
+  }
+Capture:
+  title: "@body jp $.glossary.title"
+  date: "@headers Date"
+
+

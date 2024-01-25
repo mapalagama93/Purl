@@ -5,7 +5,7 @@ from app.core.request_processor import RequestProcessor
 from app.core.response_processor import ResponseProcessor
 from app.core.script_executor import script_executor
 import logging as log
-from termcolor import cprint
+from termcolor import cprint, colored
 
 class Processor:
 
@@ -14,11 +14,11 @@ class Processor:
             cprint('No filew provided. eg: purl -f request.purl', 'black', 'on_yellow', attrs=['bold'])
 
         for file in files:
-            cprint('\n Running ' + file + '', 'white', 'on_blue', attrs=['bold'])
+            print(colored(' REQUEST ', 'white', 'on_blue', attrs=['bold']) + colored(' ' + file + ' ', 'white', 'on_light_blue', attrs=['bold']))
             log.info('processing file, file = %s', __file__)
             file_processor = FileProcessor(file)
             try:
-                pfile = file_processor.parse_pre_script()
+                pfile = file_processor.parse_file()
             except Exception as ex:
                 log.error('error while parsing file = %s, message = %s', file, ex)
                 continue

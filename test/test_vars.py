@@ -39,3 +39,11 @@ class TestVars(unittest.TestCase):
         vars.init()
         vars.set_context('value4', 'context value')
         self.assertEqual(vars.get('value4', 'sample value'), 'context value')
+
+    
+    def test_init_set_context_asd(self):
+        import yaml
+        import json
+        r = open('test/resources/api_get_json_capture.yaml', 'r').read()
+        y = yaml.safe_load(r)
+        print(json.dumps(json.loads(y['JsonBody']), indent=2))
