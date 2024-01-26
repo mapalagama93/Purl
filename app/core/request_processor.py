@@ -27,6 +27,7 @@ class RequestProcessor:
         try:
             self.file.response_json = self.response.json()
         except:
+            self.file.response_json = None
             self.file.response_text = self.response.text
         self.file.response_status = self.response.status_code
 
@@ -112,3 +113,4 @@ class RequestProcessor:
             print(colored('None', 'light_grey', attrs=['bold']))
         for k, v in headers.items():
             print(colored(k, 'dark_grey'), ':', colored(v))
+        print('')

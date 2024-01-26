@@ -37,10 +37,14 @@ class Processor:
                 request_processor = RequestProcessor(pfile)
                 request_processor.process()
                 response_processor = ResponseProcessor(pfile)
-                response_processor.capture()
+                response_processor.asserts()
+                if response_processor.all_asserts_status:
+                    response_processor.capture()
             except Exception as e:
                 cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
                 cprint(str(e), 'light_yellow')
+                if args.is_debug:
+                    raise e
                 exit()
             
 processor = Processor()

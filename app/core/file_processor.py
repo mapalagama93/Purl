@@ -39,7 +39,7 @@ class FileProcessor:
         self.pfile.json_body = utils.str_to_json(data['JsonBody']) if 'JsonBody' in data else None
         self.pfile.form_params = data['FormParams'] if 'FormParams' in data else None
         self.pfile.multipart_data = data['MultipartData'] if 'MultipartData' in data else None
-        self.pfile.capture = data['Capture'] if 'Capture' in data else {}
+        self.pfile.capture = data['Captures'] if 'Captures' in data else {}
         self.pfile.options = data['Options'] if 'Options' in data else {}
         self.pfile.asserts = data['Asserts'] if 'Asserts' in data else {}
         self.pfile.text_body =  data['TextBody'] if 'TextBody' in data else None

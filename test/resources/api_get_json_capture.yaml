@@ -5,8 +5,15 @@ JsonBody: |
   {
     "test" : "test json value"
   }
-Capture:
-  title: "@body jp $.glossary.title"
-  date: "@headers Date"
+Captures:
+  title: "@body jsonpath $.glossary.title"
+  date: "@headers Dateasda"
+
+Asserts:
+  "status code is 503" : "@status |==| 429"
+  "date header" : "@headers Date"
+  "check value not null" : "@body jsonpath $.glossary.title"
+  "check value equal" : "@body jsonpath $.glossary.title |==| example glossary"
+  "check value not equal" : "@body jsonpath $.glossary.title |==| example glossary"
 
 

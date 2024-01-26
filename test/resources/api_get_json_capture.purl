@@ -2,6 +2,6 @@ GET
 {{server}}/api/json
 
 
-[Capture]
+[Captures]
 json_title: "@body jp $.glossary.title"
 header_date: "@headers Date"
