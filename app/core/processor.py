@@ -31,16 +31,16 @@ class Processor:
             if args.is_curl:
                curl_generator = CurlGenerator(pfile)
                curl_generator.generate_curl()
-            else:
+               exit()
+           
+            try:
                 request_processor = RequestProcessor(pfile)
-                try:
-                    request_processor.process()
-                except Exception as e:
-                    cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
-                    cprint(str(e), 'light_yellow')
-                    exit()
-            
-            response_processor = ResponseProcessor(pfile)
-            response_processor.capture()
+                request_processor.process()
+                response_processor = ResponseProcessor(pfile)
+                response_processor.capture()
+            except Exception as e:
+                cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
+                cprint(str(e), 'light_yellow')
+                exit()
             
 processor = Processor()

@@ -35,6 +35,15 @@ class PFile:
                 url = url.replace(':' + x, str(self.path_params[x]))
         return url
 
+    def get_full_headers(self):
+        if 'set_default_content_type' in self.options and self.options['set_default_content_Type']:
+            return self.headers
+        
+        for k, v in self.headers.items():
+            if k.lower() == 'content-type':
+                return self.headers
+        return {**self.headers, **{'content-type' : self.get_content_type()}}
+
     def get_content_type(self):
         if self.json_body:
             return 'application/json'

@@ -11,7 +11,7 @@ class CurlGenerator:
         cmd += self.file.method + ' ' + self.__get_url() + ' \\\n'
         cmd += self.__get_headers()
         cmd += self.__get_body()
-        cmd += '-kv'
+        cmd += ''
         cprint(cmd, 'light_blue')
     
     def __get_url(self):
@@ -21,16 +21,15 @@ class CurlGenerator:
 
     def __get_headers(self):
         header = '';
-        for k, v in self.file.headers.items():
-            header += "-H '" + k + " : " + v + "' \\\n"
-        header += "-H 'Content-Type : " + self.file.get_content_type() + "' \\\n"
+        for k, v in self.file.get_full_headers().items():
+            header += "-H '" + k + ": " + v + "' \\\n"
         return header
 
     def __get_body(self):
         if self.file.json_body:
-            return "-d '"+utils.obj_to_json_string(self.file.json_body, pretty=True)+"' \\\n"
+            return "-d '"+utils.obj_to_json_string(self.file.json_body, pretty=True)+"' "
         elif self.file.form_params:
-            return "-d '" + urlencode(self.file.form_params) + "' \\\n"
+            return "-d '" + urlencode(self.file.form_params) + "' "
         elif self.file.text_body:
-            return "-d '" + self.file.text_body + "' \\\n"
+            return "-d '" + self.file.text_body + "' "
         return ''

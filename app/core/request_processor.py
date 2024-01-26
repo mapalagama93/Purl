@@ -13,12 +13,11 @@ class RequestProcessor:
         method = self.file.method
         url = self.file.get_full_url()
         headers = self.__get_headers()
-        json = self.__get_json()
-        data = self.__get_data()
+        data = self.__get_json() if self.__get_json() else self.__get_data()
         query_params = self.__get_query_params()
         log.info('sending http requests to url = %s', url)
         self.__log_request()
-        self.response = request(method, url, data=data, json=json, params=query_params, headers=headers)
+        self.response = request(method, url, data=data, params=query_params, headers=headers)
         self.file.response = self.response
         self.__set_response()
         self.__log_response()
@@ -38,10 +37,7 @@ class RequestProcessor:
         return None
         
     def __get_headers(self):
-        if self.file.headers:
-            log.info('prepare headers')
-            return self.file.headers
-        return {}
+        return self.file.get_full_headers()
 
     def __get_json(self):
         if self.file.json_body:
