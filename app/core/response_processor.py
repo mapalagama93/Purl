@@ -19,7 +19,7 @@ class ResponseProcessor:
             if val == None:
                 print(colored('[Capture] value for ' + predicate + ' is empty', 'yellow'))
                 continue
-            print(colored('[Capture] ' + predicate + ' = ' + val, 'green'))
+            print(colored('[Capture] ' + key + ' = ' + val, 'green'))
             vars.set(key, val)
     
     def asserts(self):
