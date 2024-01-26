@@ -21,8 +21,11 @@ class ResponseProcessor:
                 vars.set(key, self.__capture_headers(predicate))
     
     def __capture_body(self, token):
+        if self.file.response_json == None:
+            return
+        
         predicate = token.replace('@body ', '')
-        if predicate.startswith('jsonpath') and self.file.response_json:
+        if predicate.startswith('jsonpath'):
             log.debug('capture body with jsonpath. predicate = %s', predicate)
             return self.__get_from_jsonpath(self.file.response_json, predicate.replace('jsonpath ', ''))
         raise Exception('Invalid syntaxt for capture ' + token)
@@ -37,5 +40,7 @@ class ResponseProcessor:
         return ''
 
     def __capture_headers(self, token):
+        if self.file.respon.headers == None:
+            return
         predicate = token.replace('@headers ', '')
         return self.file.response.headers[predicate]
