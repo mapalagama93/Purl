@@ -26,14 +26,6 @@ class FileProcessor:
         vals = vars.get_all()
         for v in vals:
             content =  content.replace('${' + v + '}', str(vals[v].data))
-        # catch missing parametrs
-        regex = r"\${(\w+)}"
-        matches = re.finditer(regex,  content, re.MULTILINE)
-        errors = []
-        for m in matches:
-            errors.append("${"+m.group(1)+"}")
-        if len(errors) > 0:
-            raise Exception('Unknown values for variables ' + utils.obj_to_json_string(errors))
         return content
 
     def parse_file(self):
