@@ -1,0 +1,8 @@
+Method: POST
+Endpoint: ${server}/api/json
+
+MultipartData:
+  file1: "@file://files/sample.jpg | filename.jpeg | image/jpeg"
+  file2: "@file://files/sample.jpg | ifilename2.jpeg | image/jpeg"
+  file3: "Hello"
+

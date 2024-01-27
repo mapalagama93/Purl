@@ -1,8 +1,8 @@
 from requests import request
 import app.utils as utils
 import logging as log
-from termcolor import cprint, colored
-import json
+from termcolor import colored
+from requests_toolbelt import MultipartEncoder
 
 class RequestProcessor:
 
@@ -53,6 +53,28 @@ class RequestProcessor:
         if self.file.form_params:
             log.info('prepare form params')
             return self.file.form_params
+        if self.file.multipart_data:
+            log.info('prepare multipart data')
+            return self.__get_multipart_data()
+    
+    def __get_multipart_data(self):
+        if self.file.multipart_data == None:
+            return {}
+        fields = {}
+        for k, v in self.file.multipart_data.items():
+            if not v.startswith('@file://'):
+                fields[k] =  v
+                continue
+            
+            s = v.split(' | ')
+            if len(s) != 3:
+                raise Exception('Invalid multipart file syntaxt ' + v)
+            file = s[0].replace('@file://', '')
+            name = s[1]
+            type = s[2]
+            fields[k] = (name, open(file, 'rb'), type)
+        print(fields)
+        return MultipartEncoder(fields=fields)
 
     def __log_request(self):
         print('')
@@ -87,7 +109,13 @@ class RequestProcessor:
             data = self.file.text_body
         elif self.file.multipart_data:
             type = '[MULTIPART]'
-            data = 'Multipart not supported yet'
+            data = ''
+            for k, v in self.file.multipart_data.items():
+                data += colored(k, attrs=['bold'])
+                data += ' : '
+                data += colored(v)
+                data += '\n'
+            data = data[:-1]
         
         print(colored('Request Body ' + type, 'magenta', attrs=['bold']))
         print(colored(data))
@@ -96,8 +124,7 @@ class RequestProcessor:
     def __log_response(self):
         print(  colored('  ', 'white', 'on_green', attrs=["bold"]) +
                 colored(' RESPONSE ', 'green', 'on_white', attrs=["bold"]) + 
-                colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' ', 
-                      'white', 'on_dark_grey', attrs=['bold']))
+                colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' [' + '' + str(self.response.elapsed.microseconds/100) + 'ms' + '] ', 'white', 'on_dark_grey', attrs=['bold']))
         print('')
         # print response body
         body = self.file.response_text
@@ -114,4 +141,5 @@ class RequestProcessor:
             print(colored('None', attrs=['bold']))
         for k, v in headers.items():
             print(colored(k, attrs=['bold']), ':', colored(v))
+    
         print('')

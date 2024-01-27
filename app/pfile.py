@@ -50,6 +50,6 @@ class PFile:
         elif self.form_params:
             return 'application/x-www-form-urlencoded'
         elif self.multipart_data:
-            return 'tform-data/multipart'
+            return 'multipart/form-data'
         return 'text/plain'
         
