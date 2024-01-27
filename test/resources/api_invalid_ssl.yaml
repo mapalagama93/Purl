@@ -1,0 +1,6 @@
+Method: GET
+Endpoint: https://self-signed.badssl.com/
+
+
+Options:
+  insecure: true

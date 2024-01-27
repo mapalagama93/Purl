@@ -1,3 +1,5 @@
+from app.args import args
+from app.vars import vars
 
 class PFile:
     
@@ -27,6 +29,7 @@ class PFile:
     response_json = None
     response_text = None 
     response_status = None
+    response_time = None
 
     def get_full_url(self):
         url = self.url
@@ -52,4 +55,20 @@ class PFile:
         elif self.multipart_data:
             return 'multipart/form-data'
         return 'text/plain'
+    
+    def get_options(self):
+        ops = {}
+        vs = vars.get_all()
+        for v in vs:
+            if v.startswith('purl_ops_'):
+                ops[v.replace('purl_ops_', '')] = str(vs[v].data)
         
+        for k,v in self.options.items():
+            ops[k] = str(v)
+
+        for i in args.options:
+            if '=' not in i:
+                raise Exception('Invalid option and value ' + i)
+            s = i.split('=')
+            ops[s[0]] = str(s[1])
+        return ops

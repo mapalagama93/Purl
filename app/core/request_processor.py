@@ -10,6 +10,7 @@ class RequestProcessor:
         self.file = pfile
 
     def process(self):
+        self.__get_session()
         method = self.file.method
         url = self.file.get_full_url()
         headers = self.__get_headers()
@@ -23,13 +24,18 @@ class RequestProcessor:
         self.__log_response()
         log.info('response received. status = %s', self.response.status_code)
 
+    def __get_session(self):
+        print(self.file.get_options())
+
     def __set_response(self):
         try:
             self.file.response_json = self.response.json()
+            self.file.response_text = self.response.text
         except:
             self.file.response_json = None
             self.file.response_text = self.response.text
         self.file.response_status = self.response.status_code
+        self.file.response_time = str(self.response.elapsed.microseconds / 100)
 
     def __get_query_params(self):
         if self.file.query_params:

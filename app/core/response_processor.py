@@ -63,11 +63,13 @@ class ResponseProcessor:
         if token.startswith('@body'):
             log.debug('getting  body value. predicate = %s', token)
             val = self.__capture_body(token)
-        if token.startswith('@headers'):
+        elif token.startswith('@headers'):
             log.debug('getting header value. predicate = %s', token)
             val = self.__capture_headers(token)
-        if token.startswith('@status') :
+        elif token.startswith('@status') :
             val = str(self.file.response_status)
+        elif token.startswith('@duration') :
+            val = self.file.response_time
         return val
 
     def __capture_body(self, token):
