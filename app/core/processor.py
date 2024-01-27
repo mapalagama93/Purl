@@ -14,7 +14,9 @@ class Processor:
             cprint('No filew provided. eg: purl -f request.purl', 'black', 'on_yellow', attrs=['bold'])
 
         for file in files:
-            print(colored(' REQUEST ', 'white', 'on_blue', attrs=['bold']) + colored(' ' + file + ' ', 'white', 'on_light_blue', attrs=['bold']))
+            print(colored('  ', 'white', 'on_blue', attrs=["bold"]) + 
+                  colored(' REQUEST ', 'blue', 'on_white', attrs=['bold']) + 
+                  colored(' ' + file + ' ', 'white', 'on_dark_grey', attrs=['bold']))
             log.info('processing file, file = %s', __file__)
             file_processor = FileProcessor(file)
             try:

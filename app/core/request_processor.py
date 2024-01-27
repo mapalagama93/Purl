@@ -56,15 +56,15 @@ class RequestProcessor:
 
     def __log_request(self):
         print('')
-        print(colored(self.file.method, 'blue', attrs=['bold']), colored(self.file.get_full_url(), attrs=['bold']))
+        print(colored(' ' + self.file.method + ' ', 'white', 'on_magenta', attrs=['bold']), colored(self.file.get_full_url(), attrs=['bold']))
         print('')
         # print headers
         print(colored('Request Headers ', 'magenta', attrs=['bold']))
         headers = self.__get_headers()
         if len(headers) == 0:
-            print(colored('None', 'light_grey', attrs=['bold']))
+            print(colored('None', attrs=['bold']))
         for k, v in headers.items():
-            print(colored(k, 'dark_grey'), ':', colored(v))
+            print(colored(k, attrs=['bold']), ':', colored(v))
         print('')
         # print body
         type = ''
@@ -90,12 +90,13 @@ class RequestProcessor:
             data = 'Multipart not supported yet'
         
         print(colored('Request Body ' + type, 'magenta', attrs=['bold']))
-        print(colored(data, 'light_grey', attrs=['bold']))
+        print(colored(data))
         print('')
     
     def __log_response(self):
-        print(colored(' RESPONSE ', 'white', 'on_green', attrs=["bold"]) + 
-              colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' ', 
+        print(  colored('  ', 'white', 'on_green', attrs=["bold"]) +
+                colored(' RESPONSE ', 'green', 'on_white', attrs=["bold"]) + 
+                colored(' ' + str(self.response.status_code) + ' ' + utils.status_description(str(self.response.status_code)) + ' ', 
                       'white', 'on_dark_grey', attrs=['bold']))
         print('')
         # print response body
@@ -110,7 +111,7 @@ class RequestProcessor:
         print(colored('Response Headers ', 'magenta', attrs=['bold']))
         headers = self.response.headers
         if len(headers) == 0:
-            print(colored('None', 'light_grey', attrs=['bold']))
+            print(colored('None', attrs=['bold']))
         for k, v in headers.items():
-            print(colored(k, 'dark_grey'), ':', colored(v))
+            print(colored(k, attrs=['bold']), ':', colored(v))
         print('')

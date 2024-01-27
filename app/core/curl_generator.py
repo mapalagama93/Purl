@@ -7,12 +7,13 @@ class CurlGenerator:
         self.file = file
 
     def generate_curl(self):
+        print('')
         cmd = 'curl -X '
         cmd += self.file.method + ' ' + self.__get_url() + ' \\\n'
         cmd += self.__get_headers()
         cmd += self.__get_body()
         cmd += ''
-        cprint(cmd, 'light_blue')
+        cprint(cmd)
     
     def __get_url(self):
         if self.file.query_params:
