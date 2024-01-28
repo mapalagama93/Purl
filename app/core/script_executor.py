@@ -6,7 +6,7 @@ import logging as log
 class ScriptExecutor:
 
     def execute(self, script):
-        log.info("executing script, \n%s", script)
+        log.debug("executing script, \n%s", script)
         if isinstance(script, str):
             exec(script)
 

@@ -15,7 +15,7 @@ class FileProcessor:
     def read_file(self):
         self.pfile = PFile()
         self.pfile.file_path = utils.get_abs_file_path(self.file)
-        log.info('reading file = %s', self.pfile.file_path)
+        log.debug('reading file = %s', self.pfile.file_path)
         with open(self.pfile.file_path, 'r') as content:
             self.pfile.file_content = content.read()
         return self.pfile

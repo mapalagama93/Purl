@@ -31,6 +31,8 @@ class PFile:
     response_status = None
     response_time = None
 
+    __all_options = None
+
     def get_full_url(self):
         url = self.url
         if self.path_params:
@@ -56,19 +58,33 @@ class PFile:
             return 'multipart/form-data'
         return 'text/plain'
     
-    def get_options(self):
-        ops = {}
-        vs = vars.get_all()
-        for v in vs:
-            if v.startswith('purl_ops_'):
-                ops[v.replace('purl_ops_', '')] = str(vs[v].data)
-        
-        for k,v in self.options.items():
-            ops[k] = str(v)
+    def get_option(self, key, defaultValue = None):
+        if self.__all_options == None:
+            ops = {}
+            vs = vars.get_all()
+            for v in vs:
+                if v.startswith('purl_ops_'):
+                    ops[v.replace('purl_ops_', '').lower()] = str(vs[v].data)
+            
+            for k,v in self.options.items():
+                ops[k.lower()] = str(v)
 
-        for i in args.options:
-            if '=' not in i:
-                raise Exception('Invalid option and value ' + i)
-            s = i.split('=')
-            ops[s[0]] = str(s[1])
-        return ops
+            for i in args.options:
+                if '=' not in i:
+                    raise Exception('Invalid option and value ' + i)
+                s = i.split('=')
+                ops[s[0].lower()] = str(s[1])
+            self.__all_options = ops
+
+        return self.__all_options[key.lower()] if key.lower() in self.__all_options else defaultValue
+
+    def get_timeout(self):
+        try:
+            return float(self.get_option('timeout', 10))
+        except:
+            raise('Invalid timeout value')
+    def is_option_set_to(self, option, value):
+        return self.get_option(option, None) == value
+    
+    def get_verify_ssl(self):
+        return self.get_option('insecure', 'false').lower() != 'true'

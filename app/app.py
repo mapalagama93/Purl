@@ -1,11 +1,11 @@
 from app.args import args
 from app.vars import vars
 import logging
+import warnings
 
 def main():
-    # if -i flag enabled run initializer
+    warnings.filterwarnings("ignore")
     args.parse()
-
     if args.is_debug:
         logging.basicConfig(level=logging.DEBUG)
 

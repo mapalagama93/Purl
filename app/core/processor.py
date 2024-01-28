@@ -17,7 +17,7 @@ class Processor:
             print(colored('  ', 'white', 'on_blue', attrs=["bold"]) + 
                   colored(' REQUEST ', 'blue', 'on_white', attrs=['bold']) + 
                   colored(' ' + file + ' ', 'white', 'on_dark_grey', attrs=['bold']))
-            log.info('processing file, file = %s', __file__)
+            log.debug('processing file, file = %s', __file__)
             file_processor = FileProcessor(file)
             try:
                 pfile = file_processor.parse_file()
@@ -25,7 +25,7 @@ class Processor:
                 log.error('error while parsing file = %s, message = %s', file, ex)
                 continue
             if pfile.pre_script:
-                log.info('executing prescript, file = %s', file)
+                log.debug('executing prescript, file = %s', file)
                 script_executor.execute(pfile.pre_script)
 
             pfile = file_processor.parse_file()

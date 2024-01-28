@@ -13,7 +13,7 @@ class ResponseProcessor:
         if self.file.capture == None:
             return
         print('')
-        log.info('start capturing')
+        log.debug('start capturing')
         for key, predicate in self.file.capture.items():
             val = self.__get_value(predicate)
             if val == None:
@@ -25,10 +25,10 @@ class ResponseProcessor:
     def asserts(self):
         if self.file.asserts == None:
             return None
-        log.info('start assertions')
+        log.debug('start assertions')
         self.all_asserts_status = True
         for key, token in self.file.asserts.items():
-            log.info('asserting token = %s', token)
+            log.debug('asserting token = %s', token)
             ops = None
             expect = None
             actual = None
