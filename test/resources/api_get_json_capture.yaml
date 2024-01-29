@@ -1,5 +1,6 @@
 Method: POST
 Endpoint: ${server}/api/json
+Status: 200
 
 JsonBody: |
   {

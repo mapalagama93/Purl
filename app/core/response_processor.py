@@ -27,6 +27,12 @@ class ResponseProcessor:
             return None
         log.debug('start assertions')
         self.all_asserts_status = True
+
+        if str(self.file.response_status) != str(self.file.status):
+            self.all_asserts_status = False
+            print(colored('[Assert Failed] incorrect status code | expected = ' + str(self.file.status) + ', actual value = ' + str(self.file.response_status) , 'red'))
+            return self.all_asserts_status
+
         for key, token in self.file.asserts.items():
             log.debug('asserting token = %s', token)
             ops = None

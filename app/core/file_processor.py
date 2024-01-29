@@ -32,6 +32,7 @@ class FileProcessor:
         data = utils.str_to_yaml(self.__parse_file_content())
         self.pfile.url = data['Endpoint'] if 'Endpoint' in data else None
         self.pfile.method = data['Method'] if 'Method' in data else None
+        self.pfile.status = data['Status'] if 'Status' in data else "200"
         self.pfile.basic_auth = data['BasicAuth'] if 'BasicAuth' in data else None
         self.pfile.headers = data['Headers'] if 'Headers' in data else {}
         self.pfile.path_params = data['PathParams'] if 'PathParams' in data else {}
