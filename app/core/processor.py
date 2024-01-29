@@ -15,7 +15,7 @@ class Processor:
 
         for file in files:
             print(colored('  ', 'white', 'on_blue', attrs=["bold"]) + 
-                  colored(' REQUEST ', 'blue', 'on_white', attrs=['bold']) + 
+                  colored(' REQUEST ', 'black', 'on_white', attrs=['bold']) + 
                   colored(' ' + file + ' ', 'white', 'on_dark_grey', attrs=['bold']))
             log.debug('processing file, file = %s', __file__)
             file_processor = FileProcessor(file)
@@ -48,5 +48,6 @@ class Processor:
                 if args.is_debug:
                     raise e
                 exit()
+            print('\n')
             
 processor = Processor()

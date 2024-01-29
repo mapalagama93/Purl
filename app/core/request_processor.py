@@ -135,7 +135,7 @@ class RequestProcessor:
     
     def __log_response(self):
         print(  colored('  ', 'white', 'on_green', attrs=["bold"]) +
-                colored(' RESPONSE ', 'green', 'on_white', attrs=["bold"]) + 
+                colored(' RESPONSE ', 'black', 'on_white', attrs=["bold"]) + 
                 colored(' ' + str(self.response.status_code) + ' ' + 
                         utils.status_description(str(self.response.status_code)) + 
                         ' [' + '' + str(self.file.response_time) + ' ms' + '] ', 'white', 'on_dark_grey', attrs=['bold']))
