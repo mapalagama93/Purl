@@ -80,7 +80,7 @@ class PFile:
 
     def get_timeout(self):
         try:
-            return float(self.get_option('timeout', 10))
+            return float(self.get_option('timeout', 60))
         except:
             raise('Invalid timeout value')
     def is_option_set_to(self, option, value):

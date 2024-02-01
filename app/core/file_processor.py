@@ -4,6 +4,7 @@ import app.utils as utils
 import re
 import logging as log
 from app.vars import vars
+from termcolor import colored
 
 class FileProcessor:
 
@@ -15,6 +16,11 @@ class FileProcessor:
     def read_file(self):
         self.pfile = PFile()
         self.pfile.file_path = utils.get_abs_file_path(self.file)
+        if not utils.is_file_exists(self.pfile.file_path):
+            print('')
+            print(colored(' FILE NOT FOUND ', 'white', 'on_red'))
+            print(colored(self.pfile.file_path, 'yellow'))
+            exit()
         log.debug('reading file = %s', self.pfile.file_path)
         with open(self.pfile.file_path, 'r') as content:
             self.pfile.file_content = content.read()
