@@ -11,6 +11,7 @@ class Args:
     is_init = False
     is_debug = False
     options = []
+    variables = []
     
 
     def parse(self):
@@ -21,6 +22,7 @@ class Args:
         __parser.add_argument('-e', '--env', nargs='*', help='specify list of env to apply.') 
         __parser.add_argument('-f', '--files', nargs='*', help='specify list of actions to be performed.')
         __parser.add_argument('-o', '--options',nargs='*', help='purl options') 
+        __parser.add_argument('-v', '--vars',nargs='*', help='override vars') 
 
         __parser = __parser.parse_args()
         self.env = __parser.env if __parser.env != None else []
@@ -29,5 +31,6 @@ class Args:
         self.is_init = __parser.init
         self.is_debug = __parser.debug
         self.options = __parser.options if __parser.options != None else []
+        self.variables = __parser.vars if __parser.vars != None else []
 
 args = Args()

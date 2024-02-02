@@ -16,7 +16,7 @@ class FileProcessor:
     def read_file(self):
         self.pfile = PFile()
         self.pfile.file_path = utils.get_abs_file_path(self.file)
-        if not utils.is_file_exists(self.pfile.file_path):
+        if not utils.is_file_exists(self.file):
             print('')
             print(colored(' FILE NOT FOUND ', 'white', 'on_red'))
             print(colored(self.pfile.file_path, 'yellow'))

@@ -19,6 +19,8 @@ class Vars:
         self.__load_config()
         self.__load_store()
         self.__load_envs()
+        self.__load_context()
+    
 
     def get(self, key, default_alue = ''):
         if key in self.__context:
@@ -31,6 +33,13 @@ class Vars:
             return self.__configs[key].data
         
         return default_alue
+
+    def __load_context(self):
+        for v in args.variables:
+            s = v.split('=', 1)
+            if len(s) != 2 :
+                raise Exception('Invalid variable ' + v)
+            self.set_context(s[0], s[1])
 
     def set(self, key, value):
         self.__store[key] = value
