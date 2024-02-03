@@ -1,5 +1,0 @@
-GET 
-{{server}}/api/text
-
-[PreScript]
-print('hello prescript')
