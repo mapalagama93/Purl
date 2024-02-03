@@ -1,5 +1,5 @@
 
-![enter image description here](https://i.postimg.cc/1txtKRQD/purl.png)
+![enter image description here](https://i.postimg.cc/28fCs1qt/purl.png)
 
 # Better way to do API calls
 Simply Purl is a command line tool to makes API calls. 
