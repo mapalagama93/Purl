@@ -7,6 +7,9 @@ setup(
             'requests',
             'termcolor',
             'jsonpath-ng',
+            'pyyaml',
+            'requests_toolbelt',
+            'jproperties'
         ],
         entry_points={
             'console_scripts': [
