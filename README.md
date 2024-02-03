@@ -20,9 +20,10 @@ And create alias in your `~/.bashrc` or `~/.zshrc`
 
 ### Purl sample request
 Create `sample.yaml` file with below content.
-
-    Method: GET
-    Endpoint: https://dummyjson.com/http/200
+```yaml
+Method: GET
+Endpoint: https://dummyjson.com/http/200
+```
    
 Run with following command
   
