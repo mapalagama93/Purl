@@ -40,7 +40,7 @@ class RequestProcessor:
             self.file.response_json = None
             self.file.response_text = self.response.text
         self.file.response_status = self.response.status_code
-        self.file.response_time = str(self.response.elapsed.microseconds / 1000)
+        self.file.response_time = round(self.response.elapsed.total_seconds() * 1000 , 2)
 
     def __get_query_params(self):
         if self.file.query_params:
