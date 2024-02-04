@@ -35,26 +35,27 @@ class ResponseProcessor:
 
         for key, token in self.file.asserts.items():
             log.debug('asserting token = %s', token)
-            ops = None
+            ops = '|!=|'
             expect = None
             actual = None
-            if '|==|' in token:
-                ops = '|==|'
-            elif '|!=|' in token:
-                ops = '|!=|'
+
+            # Check operator
+            available_ops = ['|==|', '|!=|', '|~=|']
+            for ao in available_ops:
+                if ao in token:
+                    ops = ao
+                    break
             
-            if ops == None:
+            # split components
+            token_components = token.split( ' ' + ops + ' ')
+            if len(token_components) == 1:
                 actual = self.__get_value(token)
-                ops = '|!=|'
             else:
-                t = token.split( ' ' + ops + ' ')[0]
-                actual = self.__get_value(t)
-                expect = token.split(' ' + ops + ' ')[1]
-            result = False
-            if ops == '|!=|':
-                result = actual != expect
-            elif ops == '|==|':
-                result = actual == expect
+                actual = self.__get_value(token_components[0])
+                expect = token_components[1] 
+
+            # assert
+            result = self.__assert(expect, actual, ops)
                 
             if result:
                 print(colored('[Assert Success] ' + key + '' , 'green'))
@@ -62,6 +63,14 @@ class ResponseProcessor:
                 self.all_asserts_status = False
                 print(colored('[Assert Failed] ' + key + ' | expected = ' + expect + ', actual value = ' + actual , 'red'))
         return self.all_asserts_status
+
+    def __assert(self, expect, actual, ops):
+        if ops == '|!=|':
+            return actual != expect
+        if ops == '|==|':
+            return actual == expect
+        if ops == '|~=|':
+            return expect in actual
 
 
     def __get_value(self, token):
@@ -80,10 +89,21 @@ class ResponseProcessor:
 
     def __capture_body(self, token):
         predicate = token.replace('@body ', '')
+
         if predicate.startswith('jsonpath') and self.file.response_json != None:
             log.debug('capture body with jsonpath. predicate = %s', predicate)
             return self.__get_from_jsonpath(self.file.response_json, predicate.replace('jsonpath ', ''))
-        return None
+        
+        if predicate.startswith('xpath') and self.file.response_text != None:
+            log.debug('capture body with xpath. predicate = %s', predicate)
+            return self.__get_from_xpath(self.file.response_text, predicate.replace('xpath ', ''))
+        
+        if predicate.startswith('regex') and self.file.response_text != None:
+            log.debug('capture body with regex. predicate = %s', predicate)
+            return self.__get_from_regex(self.file.response_text, predicate.replace('regex ', ''))
+            
+        log.debug('capture whole body')
+        return self.file.response_text
     
     def __get_from_jsonpath(self, json, path):
         log.debug('capture using jsonpath. jsonpath = %s', path)
@@ -95,6 +115,14 @@ class ResponseProcessor:
         if len(match) > 0:
             log.debug('json path value found, path = %s, value = %s', path, match[0].value)
             return str(match[0].value)
+        return None
+
+    def __get_from_xpath(self, xml, path):
+        cprint("xpath does not support yet")
+        return None
+
+    def __get_from_regex(self, text, regex):
+        cprint("regex does not support yet")
         return None
 
     def __capture_headers(self, token):

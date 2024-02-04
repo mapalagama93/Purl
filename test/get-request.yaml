@@ -1,0 +1,51 @@
+Method: GET
+Endpoint: ${server}/users/:userId/posts
+Status: 200 # Expect 200 status code
+# Define query parameters
+QueryParams:
+  page: 1
+  size: 10
+
+# Define path parameters. :userId in the url will be replace with following userId value.
+PathParams:
+  userId: user123
+
+Headers:
+  Authorization: Basic ${auth_header}
+
+FormParams:
+  myFormKey: Form parameter value.
+
+JsonBody: |
+  {
+    "myJsonKey" : "myJsonValue"
+  }
+
+TextBody: |
+  Sample text body 
+
+
+MultipartData:
+  myTextKey: My text value 
+  file2: "@file://files/sample.jpg | ifilename2.jpeg | image/jpeg" # filepath | filename | content type
+
+# Assertion Syntax
+# @status to get response status code
+# @heaader to get reponse headers : @header Authorization 
+# @body to capture body and then specify parse method such as regex, jsonpath, xpath : @body jsonpath $.user.name
+Asserts:
+  "status code is 200" : "@status |==| 200" # check if status code is 200
+  "date header" : "@headers Date" # Check if Date header is not null
+  "check value not null" : "@body jsonpath $.glossary.title" # Check if json body value is not null
+  "check value equal" : "@body jsonpath $.glossary.title |==| example glossary" # Check if body value is equal to expected value
+  "check value not equal" : "@body jsonpath $.glossary.title |!=| not example glossary" # Check if body value is not equal
+
+# Capture response data. These capture data will persists in configs/store.properties file
+Captures:
+  authorizationToken : "@header authorization"
+  username: "@body jsonpath $user.name"
+
+Options:
+  insecure: true # ignore ssl verification
+  timeout: 20 # set custom timeout value, default is 60 seconds
+
