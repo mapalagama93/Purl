@@ -4,7 +4,8 @@ from app.vars import vars
 class PFile:
     
     file_path = None
-    file_content = None;
+    file_content = None
+    parsed_data = None
 
     # request vars
     method = None

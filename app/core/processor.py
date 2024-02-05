@@ -4,6 +4,7 @@ from app.core.curl_generator import CurlGenerator
 from app.core.request_processor import RequestProcessor
 from app.core.response_processor import ResponseProcessor
 from app.core.script_executor import script_executor
+from app.core.script_executor import Ctx
 import logging as log
 from termcolor import cprint, colored
 
@@ -27,7 +28,7 @@ class Processor:
                 continue
             if pfile.pre_script:
                 log.debug('executing prescript, file = %s', file)
-                script_executor.execute(pfile.pre_script)
+                script_executor.execute(pfile.pre_script, Ctx(pfile.parsed_data))
 
             pfile = file_processor.parse_file()
 
@@ -44,6 +45,9 @@ class Processor:
                 if not response_processor.all_asserts_status:
                     exit(1);
                 response_processor.capture()
+                if pfile.post_script:
+                    log.debug('executing postscript, file = %s', file)
+                    script_executor.execute(pfile.post_script, Ctx(pfile.parsed_data, pfile.response))
             except Exception as e:
                 cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
                 cprint(str(e), 'light_yellow')
