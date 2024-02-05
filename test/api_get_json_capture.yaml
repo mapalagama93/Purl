@@ -1,18 +1,12 @@
-Method: POST
+Method: GET
 Endpoint: ${server}/api/json
 Status: 200
 
-
-JsonBody: |
-  {
-    "test" : "test json value"
-  }
 Captures:
   title: "@body jsonpath $.glossary.title"
-  date: "@headers Dateasda"
+  date: "@headers Date"
 
 Asserts:
-  "status code is 503" : "@status |==| 429"
   "date header" : "@headers Date"
   "check value not null" : "@body jsonpath $.glossary.title"
   "check value equal" : "@body jsonpath $.glossary.title |==| example glossary"

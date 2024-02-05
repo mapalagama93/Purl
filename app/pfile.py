@@ -41,13 +41,17 @@ class PFile:
         return url
 
     def get_full_headers(self):
-        if 'set_default_content_type' in self.options and self.options['set_default_content_Type']:
+        if 'setContentType' in self.options and self.options['setContentType']:
             return self.headers
         
+        if self.get_content_type() == None:
+            return self.headers
+
         for k, v in self.headers.items():
             if k.lower() == 'content-type':
                 return self.headers
-        return {**self.headers, **{'content-type' : self.get_content_type()}}
+
+        return {**self.headers, **{'Content-Type' : self.get_content_type()}}
 
     def get_content_type(self):
         if self.json_body:
@@ -56,7 +60,9 @@ class PFile:
             return 'application/x-www-form-urlencoded'
         elif self.multipart_data:
             return 'multipart/form-data'
-        return 'text/plain'
+        elif self.text_body:
+            return 'text/plain'
+        return None
     
     def get_option(self, key, defaultValue = None):
         if self.__all_options == None:
