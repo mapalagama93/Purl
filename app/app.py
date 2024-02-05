@@ -13,9 +13,9 @@ def main():
         from app.initializer import Initializer
         i = Initializer()
         i.init()
-        exit()
+        exit(0)
     
     from app.core.processor import processor
     vars.init()
-    processor.process(args.files)
+    processor.process_files(args.files)
     

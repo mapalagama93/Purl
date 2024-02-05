@@ -9,9 +9,10 @@ from termcolor import cprint, colored
 
 class Processor:
 
-    def process(self, files):
+    def process_files(self, files):
         if len(files) == 0:
-            cprint('No filew provided. eg: purl -f request.purl', 'black', 'on_yellow', attrs=['bold'])
+            cprint('No file provided. eg: purl -f request.purl', 'black', 'on_yellow', attrs=['bold'])
+            exit(1)
 
         for file in files:
             print(colored('  ', 'white', 'on_blue', attrs=["bold"]) + 
@@ -33,21 +34,23 @@ class Processor:
             if args.is_curl:
                curl_generator = CurlGenerator(pfile)
                curl_generator.generate_curl()
-               exit()
+               exit(1)
            
             try:
                 request_processor = RequestProcessor(pfile)
                 request_processor.process()
                 response_processor = ResponseProcessor(pfile)
                 response_processor.asserts()
-                if response_processor.all_asserts_status:
-                    response_processor.capture()
+                if not response_processor.all_asserts_status:
+                    exit(1);
+                response_processor.capture()
             except Exception as e:
                 cprint(' UNEXPECTED EXCEPTION ', 'white', 'on_red', attrs=['bold'])
                 cprint(str(e), 'light_yellow')
                 if args.is_debug:
                     raise e
-                exit()
+                exit(1)
             print('\n')
+        exit(0)
             
 processor = Processor()

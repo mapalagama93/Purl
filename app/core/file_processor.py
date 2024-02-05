@@ -20,7 +20,7 @@ class FileProcessor:
             print('')
             print(colored(' FILE NOT FOUND ', 'white', 'on_red'))
             print(colored(self.pfile.file_path, 'yellow'))
-            exit()
+            exit(1)
         log.debug('reading file = %s', self.pfile.file_path)
         with open(self.pfile.file_path, 'r') as content:
             self.pfile.file_content = content.read()
