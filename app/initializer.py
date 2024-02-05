@@ -28,7 +28,7 @@ Asserts:
 class Initializer:
 
     __files = ['/configs/config.properties', '/configs/store.properties', '/sample.yaml']
-    __dirs = ['/configs', '/scripts']
+    __dirs = ['/configs']
     __file_content = {
             '/sample.yaml' : globals()['__sample_request']
     }
