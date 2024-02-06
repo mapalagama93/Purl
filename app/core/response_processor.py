@@ -61,10 +61,15 @@ class ResponseProcessor:
                 print(colored('[Assert Success] ' + key + '' , 'green'))
             else:
                 self.all_asserts_status = False
-                print(colored('[Assert Failed] ' + key + ' | expected = ' + expect + ', actual value = ' + actual , 'red'))
+                if expect == None:
+                    print(colored('[Assert Failed] ' + key + ' | expected not null, actual value = null' , 'red'))
+                else:
+                    print(colored('[Assert Failed] ' + key + ' | expected = ' + expect + 
+                                  ', actual value = ' + actual if actual != None else '' , 'red'))
         return self.all_asserts_status
 
     def __assert(self, expect, actual, ops):
+        log.debug('asserting expect = %s actual = %s ops = %s', expect, actual, ops)
         if ops == '|!=|':
             return actual != expect
         if ops == '|==|':
@@ -90,17 +95,13 @@ class ResponseProcessor:
     def __capture_body(self, token):
         predicate = token.replace('@body ', '')
 
-        if predicate.startswith('jsonpath') and self.file.response_json != None:
+        if predicate.startswith('jsonpath'): 
+            if self.file.response_json == None:
+                log.debug('prediate is jsonpath. but json body is empty')
+                return None
             log.debug('capture body with jsonpath. predicate = %s', predicate)
             return self.__get_from_jsonpath(self.file.response_json, predicate.replace('jsonpath ', ''))
         
-        if predicate.startswith('xpath') and self.file.response_text != None:
-            log.debug('capture body with xpath. predicate = %s', predicate)
-            return self.__get_from_xpath(self.file.response_text, predicate.replace('xpath ', ''))
-        
-        if predicate.startswith('regex') and self.file.response_text != None:
-            log.debug('capture body with regex. predicate = %s', predicate)
-            return self.__get_from_regex(self.file.response_text, predicate.replace('regex ', ''))
             
         log.debug('capture whole body')
         return self.file.response_text

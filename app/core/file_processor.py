@@ -61,5 +61,11 @@ class FileProcessor:
         self.pfile.text_body =  data['TextBody'] if 'TextBody' in data else None
         self.pfile.pre_script =  data['PreScript'] if 'PreScript' in data else None
         self.pfile.post_script =  data['PostScript'] if 'PostScript' in data else None
+        self.sanitize()
         self.pfile.parsed_data = data
         return self.pfile
+
+    def sanitize(self):
+        if self.pfile.headers != None:
+            for k, v in self.pfile.headers.items():
+                self.pfile.headers[k] = str(v) if v != None else ''

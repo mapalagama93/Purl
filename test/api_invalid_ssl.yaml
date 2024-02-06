@@ -4,7 +4,10 @@ Endpoint: https://self-signed.badssl.com/
 Headers:
   val1: ${value1}
   val2: ${value2}
-  val3: ${pf.paragraph(nb_sentences=5)}
+  val3: 
 
 Options:
   insecure: true
+
+Asserts:
+  "test" : "@body jsonpath $.hello"
