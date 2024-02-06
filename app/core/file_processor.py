@@ -35,7 +35,7 @@ class FileProcessor:
         pattern = r'\${([^}]*)}'
         matches = re.findall(pattern, content)
         for match in matches:
-            if(not match.startswith('pf.')):
+            if(not match.startswith('fake.')):
                 content = content.replace('${' + match + '}', str(vars.get(match)))
                 continue
             # handle purl faker

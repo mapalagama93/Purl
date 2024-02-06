@@ -6,7 +6,7 @@ class PFaker:
         self.fake = Faker()
 
     def get_value(self, template):
-        template = template.replace('pf.', 'self.fake.')
+        template = template.replace('fake.', 'self.fake.')
         out = eval(template)
         return out
 
