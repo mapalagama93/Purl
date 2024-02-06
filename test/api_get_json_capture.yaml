@@ -2,6 +2,9 @@ Method: GET
 Endpoint: ${server}/api/json
 Status: 200
 
+Headers:
+  title: "@header == 'Test'"
+
 Captures:
   title: "@body jsonpath $.glossary.title"
   date: "@headers Date"

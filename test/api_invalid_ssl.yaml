@@ -1,23 +1,10 @@
 Method: GET
 Endpoint: https://self-signed.badssl.com/
 
+Headers:
+  val1: ${value1}
+  val2: ${value2}
+  val3: ${pf.paragraph(nb_sentences=5)}
 
 Options:
   insecure: true
-
-PreScript: |
-  print(fn.time())
-  print(fn.time(format=fn.STD_DATE))
-  print(fn.time(format=fn.STD_TIME))
-  print(fn.rand_str(100))
-  print(fn.rand_num(100, 2))
-  b = fn.base64_encode('Hello')
-  print(b)
-  print(fn.base64_decode(b))
-  print(fn.sha256('asdasd'))
-  print(fn.uuid())
-
-
-PostScript: |
-  print('post script', file.Asserts)
-  print('post script', response.text)

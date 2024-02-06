@@ -4,6 +4,7 @@ import app.utils as utils
 import re
 import logging as log
 from app.vars import vars
+from app.pfaker import pf
 from termcolor import colored
 
 class FileProcessor:
@@ -29,9 +30,17 @@ class FileProcessor:
     def __parse_file_content(self):
         log.debug('replacing file content variables')
         content = self.pfile.file_content
-        vals = vars.get_all()
-        for v in vals:
-            content =  content.replace('${' + v + '}', str(vals[v].data))
+
+
+        pattern = r'\${([^}]*)}'
+        matches = re.findall(pattern, content)
+        for match in matches:
+            if(not match.startswith('pf.')):
+                content = content.replace('${' + match + '}', str(vars.get(match)))
+                continue
+            # handle purl faker
+            val = pf.get_value(match)
+            content = content.replace('${' + match + '}', str(val))
         return content
 
     def parse_file(self):
