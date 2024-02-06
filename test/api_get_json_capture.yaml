@@ -13,7 +13,8 @@ Asserts:
   "check value not equal" : "@body jsonpath $.glossary.title |==| example glossary"
 
 PreScript: |
-  print('prescript')
+  print('test')
+  print(fn.time())
 
 PostScript: |
   print('post script', file.Asserts)

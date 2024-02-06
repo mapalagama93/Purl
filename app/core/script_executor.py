@@ -1,5 +1,6 @@
 from app.vars import vars
 from app.args import args
+import app.functions as fn
 import sys
 import os
 import logging as log
