@@ -3,6 +3,8 @@ from pathlib import Path
 import os
 from termcolor import cprint
 from app.args import args
+from app.pfaker import pf
+import re
 
 class Vars:
     __configs = Properties()
@@ -20,6 +22,7 @@ class Vars:
         self.__load_store()
         self.__load_envs()
         self.__load_context()
+        self.__process_dynamic_vars()
     
 
     def get(self, key, default_alue = ''):
@@ -81,5 +84,21 @@ class Vars:
     
     def set_context(self, key, value):
         self.__context[key] = value
+    
+    def __process_dynamic_vars(self):
+        all = self.get_all()
+        for i in all:
+            template = str(all[i].data)
+            pattern = r'\${([^}]*)}'
+            matches = re.findall(pattern, template)
+            for match in matches:
+                if(not match.startswith('fake.')):
+                    continue
+                # handle purl faker
+                val = pf.get_value(match)
+                template = template.replace('${' + match + '}', str(val), 1)
+            self.set_context(i, template)
+                
+
 
 vars = Vars()

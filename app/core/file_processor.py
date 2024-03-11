@@ -40,7 +40,7 @@ class FileProcessor:
                 continue
             # handle purl faker
             val = pf.get_value(match)
-            content = content.replace('${' + match + '}', str(val))
+            content = content.replace('${' + match + '}', str(val), 1)
         return content
 
     def parse_file(self):

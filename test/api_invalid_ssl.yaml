@@ -2,9 +2,10 @@ Method: GET
 Endpoint: https://self-signed.badssl.com/
 
 Headers:
-  val1: ${value1}
-  val2: ${value2}
-  val3: 
+  val1: ${value1}_${value1}
+  val2: ${value2}_${value2}_${value1}
+  val3: ${fake.random_number()}
+  val4: ${fake.random_number()}.${fake.random_number()}.${fake.random_number()}
 
 Options:
   insecure: true
