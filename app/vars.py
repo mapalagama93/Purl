@@ -91,6 +91,8 @@ class Vars:
             template = str(all[i].data)
             pattern = r'\${([^}]*)}'
             matches = re.findall(pattern, template)
+            if len(matches) == 0:
+                continue
             for match in matches:
                 if(not match.startswith('fake.')):
                     continue

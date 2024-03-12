@@ -4,6 +4,7 @@ import app.functions as fn
 import sys
 import os
 import logging as log
+from app.pfaker import pf
 
 class ScriptExecutor:
 
@@ -15,6 +16,7 @@ class ScriptExecutor:
             get = vars.get
             response = ctx.response
             file = ctx.file
+            fake = pf.fake
             exec(script)
 
 script_executor = ScriptExecutor()
