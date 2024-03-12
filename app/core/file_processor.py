@@ -61,7 +61,9 @@ class FileProcessor:
         self.pfile.text_body =  data['TextBody'] if 'TextBody' in data else None
         self.pfile.pre_script =  data['PreScript'] if 'PreScript' in data else None
         self.pfile.post_script =  data['PostScript'] if 'PostScript' in data else None
+        self.pfile.define =  data['Define'] if 'Define' in data else {}
         self.sanitize()
+        self.process_defines()
         self.pfile.parsed_data = data
         return self.pfile
 
@@ -69,3 +71,7 @@ class FileProcessor:
         if self.pfile.headers != None:
             for k, v in self.pfile.headers.items():
                 self.pfile.headers[k] = str(v) if v != None else ''
+    
+    def process_defines(self):
+        for k, v in self.pfile.define.items():
+            vars.set(k, v)

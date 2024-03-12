@@ -24,6 +24,7 @@ class PFile:
     asserts = {}
     pre_script = None 
     post_script = None
+    define = {}
 
     # response vars
     response = None
