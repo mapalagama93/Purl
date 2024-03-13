@@ -45,6 +45,9 @@ class FileProcessor:
 
     def parse_file(self):
         data = utils.str_to_yaml(self.__parse_file_content())
+        self.pfile.define =  data['Define'] if 'Define' in data else {}
+        self.process_defines()
+        data = utils.str_to_yaml(self.__parse_file_content())
         self.pfile.url = data['Endpoint'] if 'Endpoint' in data else None
         self.pfile.method = data['Method'] if 'Method' in data else None
         self.pfile.status = data['Status'] if 'Status' in data else "200"
@@ -61,9 +64,8 @@ class FileProcessor:
         self.pfile.text_body =  data['TextBody'] if 'TextBody' in data else None
         self.pfile.pre_script =  data['PreScript'] if 'PreScript' in data else None
         self.pfile.post_script =  data['PostScript'] if 'PostScript' in data else None
-        self.pfile.define =  data['Define'] if 'Define' in data else {}
         self.sanitize()
-        self.process_defines()
+
         self.pfile.parsed_data = data
         return self.pfile
 

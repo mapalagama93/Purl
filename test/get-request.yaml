@@ -2,17 +2,20 @@ Method: POST
 Endpoint: https://reqres.in/api/register
 Status: 200
 
+PreScript: |
+  set('svar', fake.random_number(10))
+
 Define:
   email: "${fake.random_number(20)}@gmail.com"
   password: "${fake.random_number(20)}_password"
+  dsvar: "${svar}"
 
-PreScript: |
-  print(fake.random_number())
 
 JsonBody: |
   {
       "email": "${email}",
-      "password": "pistol"
+      "password": "pistol",
+      "dsvar": "${dsvar}"
   }
 
 Captures:
