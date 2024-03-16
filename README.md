@@ -1,4 +1,5 @@
 
+
 ![enter image description here](https://i.postimg.cc/28fCs1qt/purl.png)
 
 # Better way to do API calls
@@ -34,7 +35,9 @@ Run with following command
 
 ### Purl initialize
 
-    purl -i -e dev uat
+   ```shell
+   purl -i -e dev uat
+   ```
 purl -i or --initialize will initialize basic purl directory structure. Additionally you can specify environments to be created using -e option.
 
     MyFirstPurlProject/
@@ -48,71 +51,170 @@ purl -i or --initialize will initialize basic purl directory structure. Addition
 #### config.properties
 Use this file to define environment independent properties. 
 **Example**
-
+```properties
     server=http://localhost:3000
     username=mapalagama
     password=mypass123
-
+```
 ####  store.properties
 Purl will use this property file to store dynamic variables. Normally you don't need to worry about this file
 #### dev.properties/uat.properties
 You can use to specify environment specific properties. When executing purl you can specify which files apply. Feel free to create your own environment properties files.
 
-### Purl specs
+# Purl specs
+
+Use `${variableName}` to inject properties in to prul yaml. Properties source order is,
+ 1. store.properties
+ 2. {env}.properties
+ 3. config.properties
+Eg: If the property `username` define in both env properties and config properties value from env properties will be injected.
+
+## Create Request
+
+#### Define
+`Define` field allow to define properties. These properties are persists and can be used in the same requests or subsequent requests. 
 
 ```yaml
-Method: GET
-Endpoint: ${server}/users/:userId/posts
-Status: 200 # Expect 200 status code
-# Define query parameters
-QueryParams:
-  page: 1
-  size: 10
-
-# Define path parameters. :userId in the url will be replace with following userId value.
-PathParams:
-  userId: user123
-
-Headers:
-  Authorization: Basic ${auth_header}
-
-FormParams:
-  myFormKey: Form parameter value.
+Define:
+  userEmail: "${fake.random_string()}@exmaple.com"
+  userPhone: "${fake.random_number(10)}"
 
 JsonBody: |
   {
-    "myJsonKey" : "myJsonValue"
+	  "email" : "${userEmail}"
   }
+```
+ 
+#### Method, Endpoint, QueryParams, PathParams, Status
+```yaml
+Method: GET
+Endpoint: https://example.com/user/:userId/posts
+Status: 200
+PathParams:
+  userId: user123
+QueryParams:
+  page: 1
+  size: ${page_size}
+```
+In the `Endpoint` field path parameters can be defined as `:userId` and values can be inject via `PathParams` field as a key-value pair. 
 
-TextBody: |
-  Sample text body 
+`Status` will be asseted with the response status code  
 
+#### Headers
+```yaml
+Method: POST
+Endpoint: https://example.com/user/posts
+Headers:
+  Authorization: ${authorization_token}
+  Content-Type: application/json
+  Custom-Header-One: My Custom header
+```
 
+### Request Body Types
+
+#### JsonBody
+`JsonBody` allows to add json to the request body
+```yaml
+Method: POST
+Endpoint: https://example.com/user/posts
+JsonBody: |
+  {
+    "id" : "1234",
+    "post" : "This is my first post",
+    "author" : "${userEmail}"
+  }
+```
+#### FormParams
+`FormParams` allows to add x-www-form-urlencoded body to the request
+```yaml
+Method: POST
+Endpoint: https://example.com/user/posts
+FormParams:
+  id: 1234
+  post: "This is my first post"
+  author: ${userEmail}
+```
+
+#### MultipartData
+`MultipartData` allows to add multipart form data to the request body including files and text
+```yaml
+Method: POST
+Endpoint: https://example.com/user/photo
 MultipartData:
-  myTextKey: My text value 
-  file2: "@file://files/sample.jpg | ifilename2.jpeg | image/jpeg" # filepath | filename | content type
+  userId: "1234"
+  profileImage: "@file://sample.jpg | profile.jpg | image/png"
+```
+Specify file syntax
+`@file://path_to_the_file | filename | mimetype`
 
-# Assertion Syntax
-# @status to get response status code
-# @heaader to get reponse headers : @header Authorization 
-# @body to capture body and then specify parse method such as regex, jsonpath, xpath : @body jsonpath $.user.name
+
+#### TextBody
+`TextBody` allows to add text to the request body
+```yaml
+Method: POST
+Endpoint: https://example.com/user/post
+TextBody: "This test post"
+```
+
+## Handle Response
+
+#### Captures
+`Captures` allow to extract response data and store in the store.properties file. These capture values can be use in subsequent requests.
+```yaml
+Method: POST
+Endpoint: https://example.com/user/posts
+JsonBody: |
+  {
+    "id" : "1234",
+    "post" : "This is my first post",
+    "author" : "${userEmail}"
+  }
+Captures:
+ authorization_token: "@headers Authorization"
+ postId: "@body jsonpath $.id"
+ statuCode: "@status"
+ responseTime: "@time"
+```
+##### Capture Headers
+`@headers` allow to capture response headers. Syntax as follow,
+`@headers response_header_name`
+
+##### Capture Body
+`@body` allow to capture response body. Syntax as follows,
+`@body capture_type capture_query`
+
+To capture json response body value use jsonpath with json path syntaxt, eg:
+`@body jsonpath $.user.id`
+To learn more about jsonpath syntax visit : https://jsonpath.com/
+
+##### xpath and regex capture type will be implemented in future releases.
+
+#### Assertions
+
+```yaml
+Method: POST
+Endpoint: https://example.com/user/posts
+JsonBody: |
+  {
+    "id" : "1234",
+    "post" : "This is my first post",
+    "author" : "${userEmail}"
+  }
 Asserts:
   "status code is 200" : "@status |==| 200" # check if status code is 200
   "date header" : "@headers Date" # Check if Date header is not null
   "check value not null" : "@body jsonpath $.glossary.title" # Check if json body value is not null
   "check value equal" : "@body jsonpath $.glossary.title |==| example glossary" # Check if body value is equal to expected value
   "check value not equal" : "@body jsonpath $.glossary.title |!=| not example glossary" # Check if body value is not equal
+```
 
-# Capture response data. These capture data will persists in configs/store.properties file
-Captures:
-  authorizationToken : "@header authorization"
-  username: "@body jsonpath $user.name"
+#### Options
 
+```yaml
 Options:
   insecure: true # ignore ssl verification
   timeout: 20 # set custom timeout value, default is 60 seconds
-  
-
+ 
 ```
   
 
