@@ -38,11 +38,8 @@ class Vars:
         return default_alue
 
     def __load_context(self):
-        for v in args.variables:
-            s = v.split('=', 1)
-            if len(s) != 2 :
-                raise Exception('Invalid variable ' + v)
-            self.set_context(s[0], s[1])
+        for k, v in args.variables.items():
+            self.set_context[k] = v
 
     def set(self, key, value):
         self.__store[key] = value

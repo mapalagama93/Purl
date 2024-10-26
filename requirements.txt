@@ -1,0 +1,8 @@
+Faker==22.7.0
+jproperties==2.1.1
+jsonpath_ng==1.6.0
+PyYAML==6.0.1
+PyYAML==6.0.2
+Requests==2.32.3
+requests_toolbelt==1.0.0
+termcolor==2.5.0

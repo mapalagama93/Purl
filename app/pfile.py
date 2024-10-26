@@ -77,11 +77,9 @@ class PFile:
             for k,v in self.options.items():
                 ops[k.lower()] = str(v)
 
-            for i in args.options:
-                if '=' not in i:
-                    raise Exception('Invalid option and value ' + i)
-                s = i.split('=')
-                ops[s[0].lower()] = str(s[1])
+            for k,v in args.options.items():
+                ops[k] = str(v)
+
             self.__all_options = ops
 
         return self.__all_options[key.lower()] if key.lower() in self.__all_options else defaultValue

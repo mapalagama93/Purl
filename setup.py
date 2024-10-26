@@ -4,12 +4,14 @@ setup(
     name='purl',
         version='0.1.0',
         install_requires=[
-            'requests',
-            'termcolor',
-            'jsonpath-ng',
-            'pyyaml',
+            'Faker',
+            'jproperties',
+            'jsonpath_ng',
+            'PyYAML',
+            'PyYAML',
+            'Requests',
             'requests_toolbelt',
-            'jproperties'
+            'termcolor'
         ],
         entry_points={
             'console_scripts': [
